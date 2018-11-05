@@ -1,0 +1,10 @@
+.schema {
+}
+
+.schema .schema-seat {
+    width: 10px;
+}
+
+.schema .schema-control {
+    width: 10px;
+}

@@ -1,0 +1,56 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+table.schema td {
+  border: 1px solid white;
+}
+
+.copyright {
+  /* bottom fixed navbar */
+  max-height: 40px;
+}
+
+.content {
+  padding-top: 20px;
+  padding-bottom: 40px;
+  height: calc(100% - 40px - 20px);
+}
+
+.centered-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.text-centered-spinner {
+  text-align: center;
+}
+
+.overlay {
+  z-index: 100000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.7;
+  background: white;
+}
+
+.schema-container {
+  overflow-x: auto;
+}
+
+.seat {
+  text-align: center;
+  min-width: 10px;
+  min-height: 10px;
+}

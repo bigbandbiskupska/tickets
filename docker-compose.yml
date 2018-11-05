@@ -1,0 +1,25 @@
+version: '3.1'
+services:
+  tickets:
+    build: docker
+    ports:
+      - "8003:3000"
+    volumes:
+      - ".:/app"
+  seats:
+    build: ../seats/docker
+    ports:
+      - "8002:80"
+    volumes:
+      - "../seats:/app"
+  users:
+    build: ../users/docker
+    ports:
+      - "8004:80"
+    volumes:
+      - "../users:/app"
+  mysql-master:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
