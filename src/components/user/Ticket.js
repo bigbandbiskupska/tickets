@@ -94,7 +94,7 @@ class Ticket extends Component {
                             <div className="text-center">
                                 <p>Zaplatit můžete hotově na příští zkoušce nebo elektronicky převodem na účet pomocí QR platby.</p>
                                 <img
-                                    src={`http://pay.bigbandbiskupska.cz/ss/1/vs/14/${ticket.seats && ticket.seats.reduce((c, seat) => seat.price + c, 0)}/Objednavka%20${ticket.id}%20-%20${ticket.seats && ticket.seats.length}%20sedadel`}
+                                    src={`http://pay.bigbandbiskupska.cz/ss/1/vs/${ticket.id}/${ticket.seats && ticket.seats.reduce((c, seat) => seat.price + c, 0)}/Objednavka%20${ticket.id}%20-%20${ticket.seats && ticket.seats.length}%20sedadel`}
                                     alt={`Zaplatit ${ticket.seats && ticket.seats.reduce((c, seat) => seat.price + c, 0)} přes QR platbu`}
                                 />
                                 <p>
