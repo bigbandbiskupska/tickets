@@ -4,7 +4,7 @@ Ticket frontend application for http://bigbandbiskupska.cz.
 
 A small Javascript application using React framework to display available tickets for upcoming events.
 
-# Developement
+# Development
 
 Download project and dependencies to the parent folder:
 
