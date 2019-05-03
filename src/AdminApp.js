@@ -17,7 +17,6 @@ import OverviewSchema from "./components/admin/OverviewSchema";
 import OverviewSchemaList from "./components/admin/OverviewSchemaList";
 import OverviewTicketList from "./components/admin/OverviewTicketList";
 import Checkpoints from "./components/admin/checkpoints/Checkpoints";
-import HistorySchema from "./components/admin/checkpoints/HistorySchema";
 
 class AdminApp extends Component {
     render() {
@@ -38,7 +37,6 @@ class AdminApp extends Component {
                     <Switch>
                         <Route path={`${match.url}/schema/:id/reserve`} component={ReserveSchema}/>
                         <Route path={`${match.url}/schema/:id/overview`} component={OverviewSchema}/>
-                        <Route path={`${match.url}/schema/:id/history`} component={HistorySchema}/>
                         <Route path={`${match.url}/schema/:id`} component={Schema}/>
                     </Switch>
                     <Route exact path={`${match.url}/tickets`} component={TicketList}/>
@@ -56,16 +54,20 @@ class AdminApp extends Component {
 }
 
 
-
 function mapStateToProps(state, ownProps) {
 
     const menu = [
-        (state, props) => (<NavLink exact className="nav-link" isActive={(match, location) => match || location.pathname === `${props.match.url}/schemas` || location.pathname === `${props.match.url}/` || location.pathname === `${props.match.url}`} to={`${props.match.url}/schemas`}>Schéma</NavLink>),
+        (state, props) => (<NavLink exact className="nav-link"
+                                    isActive={(match, location) => match || location.pathname === `${props.match.url}/schemas` || location.pathname === `${props.match.url}/` || location.pathname === `${props.match.url}`}
+                                    to={`${props.match.url}/schemas`}>Schéma</NavLink>),
         (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/users`}>Uživatelé</NavLink>),
         (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/tickets`}>Objednávky</NavLink>),
-        (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/tickets/overview`}>Výdej</NavLink>),
-        (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/tickets/checkpoints`}>Checkpointy</NavLink>),
-        (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/schemas/overview`}>Přehled obsazenosti</NavLink>)
+        (state, props) => (
+            <NavLink exact className="nav-link" to={`${props.match.url}/tickets/overview`}>Výdej</NavLink>),
+        (state, props) => (
+            <NavLink exact className="nav-link" to={`${props.match.url}/tickets/checkpoints`}>Checkpointy</NavLink>),
+        (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/schemas/overview`}>Přehled
+            obsazenosti</NavLink>)
     ];
 
 
@@ -89,14 +91,15 @@ function mapDispatchToProps(dispatch) {
 function mergeProps(props, dispatchProps) {
     const menu = props.menu;
 
-    if(props.tabs && props.tabs.length > 0) {
+    if (props.tabs && props.tabs.length > 0) {
         props.tabs.sort((a, b) => a.index > b.index).forEach((tab, i) => {
             menu.splice(tab.index + i, 0, (s, p) => (
                 <div style={{position: 'relative'}}>
                     <NavLink exact className="nav-link" to={tab.url}>
                         {tab.name}
                     </NavLink>
-                    <button type="button" onClick={() => dispatchProps.deleteTab(tab.id)} className="close" style={{position: 'absolute', top: 1, right: 2, fontSize: '1rem'}} aria-label="Close">
+                    <button type="button" onClick={() => dispatchProps.deleteTab(tab.id)} className="close"
+                            style={{position: 'absolute', top: 1, right: 2, fontSize: '1rem'}} aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

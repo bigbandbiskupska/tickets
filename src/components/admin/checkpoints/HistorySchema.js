@@ -243,7 +243,7 @@ function mapStateToProps(state, ownProps) {
         },
         seatDiffs: Object.assign({}, ...seats.filter(seat => !!state.checkpoints.seats[seat.id])
             .map(seat => [seat.id, state.checkpoints.seats[seat.id]
-                .filter(checkpoint => !ownProps.old || checkpoint.changed_at >= ownProps.old.created_at)
+                .filter(checkpoint => !ownProps.old || checkpoint.changed_at > ownProps.old.created_at)
                 .filter(checkpoint => !ownProps.new || checkpoint.changed_at <= ownProps.new.created_at)])
             .filter(([id, diffs]) => diffs.length > 0)
             .map(([id, diffs]) => ({

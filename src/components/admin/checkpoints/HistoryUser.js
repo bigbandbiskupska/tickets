@@ -96,7 +96,7 @@ function mapStateToProps(state, ownProps) {
     return {
         user: state.users.users[ownProps.id],
         checkpoints: get(state.checkpoints.users, ownProps.id, [])
-            .filter(checkpoint => !ownProps.old || checkpoint.changed_at >= ownProps.old.created_at)
+            .filter(checkpoint => !ownProps.old || checkpoint.changed_at > ownProps.old.created_at)
             .filter(checkpoint => !ownProps.new || checkpoint.changed_at <= ownProps.new.created_at),
         apiKey: state.users.users[state.users.currentUser].token,
     }
