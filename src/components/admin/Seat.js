@@ -17,19 +17,19 @@ class Seat extends Component {
         autoBind(this);
     }
 
-    onMouseIn() {
+    onMouseIn(e) {
         const{seat, onMouseIn} = this.props;
-        onMouseIn && onMouseIn(seat)
+        onMouseIn && onMouseIn(seat, e)
     }
 
-    onMouseOut() {
+    onMouseOut(e) {
         const{seat, onMouseOut} = this.props;
-        onMouseOut && onMouseOut(seat)
+        onMouseOut && onMouseOut(seat, e)
     }
 
-    onMouseClick() {
+    onMouseClick(e) {
         const{seat, onMouseClick} = this.props;
-        onMouseClick && onMouseClick(seat)
+        onMouseClick && onMouseClick(seat, e)
     }
 
     render() {

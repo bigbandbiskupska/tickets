@@ -1,7 +1,28 @@
 import get from 'lodash/get';
 import config from '../config';
 
-const myFetch = (url, params) => {
+
+const memoize = (fn) => {
+    return (url, params = {}) => {
+        if (localStorage.getItem(url)) {
+            return Promise.resolve({
+                json: () => Promise.resolve(JSON.parse(localStorage.getItem(url)))
+            });
+        }
+        return fn(url, params)
+            .then(result => {
+                return result.json().then(data => {
+                    localStorage.setItem(url, JSON.stringify(data));
+                    return {
+                        ...result,
+                        json: () => Promise.resolve(data)
+                    }
+                });
+            });
+    }
+};
+
+const requestFetch = (url, params) => {
     return fetch(url, params)
         .then(result => {
             if (result.status >= 200 && result.status < 300) {
@@ -10,7 +31,10 @@ const myFetch = (url, params) => {
             return result.json()
                 .then(data => Promise.reject(new Error(data.message || 'Neznámá chyba')))
         });
-}
+};
+
+let myFetch = requestFetch; //memoize(requestFetch);
+//myFetch = memoize(requestFetch);
 
 export function fetchSchemas(apiKey) {
     return dispatch => {
@@ -418,7 +442,7 @@ export function saveTemporaryTicket(ticket) {
     return dispatch => {
         return Promise.resolve().then(() => {
             const storage = window.localStorage;
-            if(storage) {
+            if (storage) {
                 storage.setItem('ticket', JSON.stringify([...new Set(ticket)]));
             }
             dispatch({
@@ -431,10 +455,10 @@ export function saveTemporaryTicket(ticket) {
 export function cleanTemporaryTicket() {
     return dispatch => {
         return Promise.resolve().then(function (data) {
-                const storage = window.localStorage;
-                if(storage.getItem('ticket')) {
-                    storage.removeItem('ticket');
-                }
+            const storage = window.localStorage;
+            if (storage.getItem('ticket')) {
+                storage.removeItem('ticket');
+            }
 
             dispatch({
                 type: 'CLEAN_TEMPORARY_TICKET',
@@ -530,6 +554,144 @@ export function deleteSchema(apiKey, id) {
     }
 }
 
+export function fetchCheckpoints(apiKey) {
+    return dispatch => {
+        if (!apiKey) {
+            console.error('apiKey is needed to run the queries!');
+            return Promise.reject(new Error('Uživatel nemá platný token'));
+        }
+
+        return myFetch(`${config.apiRoot}/checkpoints?token=${apiKey}`)
+            .then(function (result) {
+                return result.json().then(function (data) {
+                    dispatch({
+                        type: 'CHECKPOINTS_FETCH_SUCCESS',
+                        checkpoints: data,
+                    });
+                    return data;
+                });
+            })
+            .catch(function (error) {
+                dispatch({
+                    type: 'CHECKPOINTS_FETCH_FAIL',
+                    error
+                });
+                return Promise.reject(error);
+            });
+    }
+}
+
+export function fetchCheckpointsDiff(apiKey, oldId, newId) {
+    return dispatch => {
+        if (!apiKey) {
+            console.error('apiKey is needed to run the queries!');
+            return Promise.reject(new Error('Uživatel nemá platný token'));
+        }
+
+        return myFetch(`${config.apiRoot}/checkpoints/diff/${oldId}/${newId || ''}?token=${apiKey}`)
+            .then(function (result) {
+                return result.json().then(function (data) {
+                    dispatch({
+                        type: 'DIFFS_FETCH_SUCCESS',
+                        diffs: {
+                            [`${oldId || 'oldest'}-${newId || 'current'}`]: data
+                        },
+                    });
+                    return data;
+                });
+            })
+            .catch(function (error) {
+                dispatch({
+                    type: 'DIFFS_FETCH_FAIL',
+                    error
+                });
+                return Promise.reject(error);
+            });
+    }
+}
+
+export function fetchSchemaHistory(apiKey, schemaId) {
+    return dispatch => {
+        if (!apiKey) {
+            console.error('apiKey is needed to run the queries!');
+            return Promise.reject(new Error('Uživatel nemá platný token'));
+        }
+
+        return myFetch(`${config.apiRoot}/schema/${schemaId}/history?token=${apiKey}`)
+            .then(function (result) {
+                return result.json().then(function (data) {
+                    dispatch({
+                        type: 'SEATS_DIFF_FETCH_SUCCESS',
+                        seats: data,
+                    });
+                    return data;
+                });
+            })
+            .catch(function (error) {
+                dispatch({
+                    type: 'SEATS_DIFF_FETCH_FAIL',
+                    error
+                });
+                return Promise.reject(error);
+            });
+    }
+}
+
+export function fetchUserHistory(apiKey, userId) {
+    return dispatch => {
+        if (!apiKey) {
+            console.error('apiKey is needed to run the queries!');
+            return Promise.reject(new Error('Uživatel nemá platný token'));
+        }
+
+        return myFetch(`${config.apiRoot}/user/${userId}/history?token=${apiKey}`)
+            .then(function (result) {
+                return result.json().then(function (data) {
+                    dispatch({
+                        type: 'USERS_DIFF_FETCH_SUCCESS',
+                        users: data,
+                    });
+                    return data;
+                });
+            })
+            .catch(function (error) {
+                dispatch({
+                    type: 'USERS_DIFF_FETCH_FAIL',
+                    error
+                });
+                return Promise.reject(error);
+            });
+    }
+}
+
+export function createCheckpoint(apiKey) {
+    return (dispatch, getState) => {
+        if (!apiKey) {
+            console.error('apiKey is needed to run the queries!');
+            return Promise.reject(new Error('Uživatel nemá platný token'));
+        }
+
+        return myFetch(`${config.apiRoot}/checkpoints?token=${apiKey}`, {
+            method: 'POST',
+            body: JSON.stringify({}),
+        })
+            .then(function (result) {
+                return result.json().then(function (data) {
+                    dispatch({
+                        type: 'CHECKPOINT_CREATE_SUCCESS',
+                    });
+                    return data;
+                });
+            })
+            .catch(function (error) {
+                dispatch({
+                    type: 'CHECKPOINT_CREATE_FAIL',
+                    error
+                });
+                return Promise.reject(error);
+            });
+    }
+}
 
 export function fetchUsers(apiKey) {
     return dispatch => {
@@ -641,14 +803,14 @@ export function login(userData) {
     return (dispatch) => {
 
         return dispatch(loginFromLocalStorage())
-            // if no user in local storage, load it
+        // if no user in local storage, load it
             .catch(() => myFetch(`${config.apiRoot}/users/login`, {
                 method: 'POST',
                 body: JSON.stringify(userData),
             })
                 .then(function (result) {
                     return result.json().then(function (data) {
-                        if(!data.token) {
+                        if (!data.token) {
                             return Promise.reject(new Error('Uživatel nemá přihlašovací token'))
                         }
 

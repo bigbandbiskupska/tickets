@@ -22,29 +22,29 @@ class Seat extends Component {
         }
     }
 
-    onMouseIn() {
+    onMouseIn(e) {
         const{seat, onMouseIn} = this.props;
-        onMouseIn && onMouseIn(seat)
+        onMouseIn && onMouseIn(seat, e)
         this.setState({
             mouseIn: true
         })
     }
 
-    onMouseLeave() {
+    onMouseLeave(e) {
         const{seat, onMouseLeave} = this.props;
-        onMouseLeave && onMouseLeave(seat)
+        onMouseLeave && onMouseLeave(seat, e)
         this.setState({
             mouseIn: false
         })
     }
 
-    onMouseClick() {
+    onMouseClick(e) {
         const{seat, onMouseClick} = this.props;
-        onMouseClick && onMouseClick(seat)
+        onMouseClick && onMouseClick(seat, e)
     }
 
     render() {
-        const {seat} = this.props;
+        const {seat, className} = this.props;
         const {mouseIn} = this.state;
 
         const title = seat.tickets && seat.tickets.length > 0 && seat.tickets.map(ticket => ticket.note).join('');
@@ -54,6 +54,7 @@ class Seat extends Component {
             <td
                 key={seat.id}
                 className={classnames({
+                    ...className,
                     'bg-success': seat.state === Seat.FREE,
                     'bg-danger': seat.state === Seat.RESERVED,
                     'bg-warning': seat.state === Seat.TEMPORARY_RESERVED,

@@ -1,12 +1,13 @@
+import 'bootstrap/dist/css/bootstrap.css';
+import 'font-awesome/css/font-awesome.min.css'
+import './index.css';
+import './heroic-features.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux'
 import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
 import store from './store';
-import './bootstrap.min.css';
-import './heroic-features.css';
-import './index.css';
-import 'font-awesome/css/font-awesome.min.css'
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import AdminApp from "./AdminApp";

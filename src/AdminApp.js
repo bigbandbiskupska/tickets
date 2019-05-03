@@ -16,6 +16,8 @@ import NewUser from "./components/admin/NewUser";
 import OverviewSchema from "./components/admin/OverviewSchema";
 import OverviewSchemaList from "./components/admin/OverviewSchemaList";
 import OverviewTicketList from "./components/admin/OverviewTicketList";
+import Checkpoints from "./components/admin/checkpoints/Checkpoints";
+import HistorySchema from "./components/admin/checkpoints/HistorySchema";
 
 class AdminApp extends Component {
     render() {
@@ -36,10 +38,12 @@ class AdminApp extends Component {
                     <Switch>
                         <Route path={`${match.url}/schema/:id/reserve`} component={ReserveSchema}/>
                         <Route path={`${match.url}/schema/:id/overview`} component={OverviewSchema}/>
+                        <Route path={`${match.url}/schema/:id/history`} component={HistorySchema}/>
                         <Route path={`${match.url}/schema/:id`} component={Schema}/>
                     </Switch>
                     <Route exact path={`${match.url}/tickets`} component={TicketList}/>
                     <Route exact path={`${match.url}/tickets/overview`} component={OverviewTicketList}/>
+                    <Route exact path={`${match.url}/tickets/checkpoints`} component={Checkpoints}/>
                     <Route path={`${match.url}/ticket/:id`} component={Ticket}/>
                     <Route exact path={`${match.url}/users`} component={UserList}/>
                     <Route exact path={`${match.url}/users/new`} component={NewUser}/>
@@ -60,6 +64,7 @@ function mapStateToProps(state, ownProps) {
         (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/users`}>Uživatelé</NavLink>),
         (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/tickets`}>Objednávky</NavLink>),
         (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/tickets/overview`}>Výdej</NavLink>),
+        (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/tickets/checkpoints`}>Checkpointy</NavLink>),
         (state, props) => (<NavLink exact className="nav-link" to={`${props.match.url}/schemas/overview`}>Přehled obsazenosti</NavLink>)
     ];
 

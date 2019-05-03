@@ -1,10 +1,11 @@
-import { combineReducers } from 'redux'
+import {combineReducers} from 'redux'
 import schemas from './schemas'
 import seats from './seats'
 import tickets from './tickets'
 import users from './users'
 import messages from './messages'
 import tabs from './tabs'
+import checkpoints from './checkpoints'
 
 export default combineReducers({
     schemas,
@@ -13,4 +14,5 @@ export default combineReducers({
     users,
     messages,
     tabs,
+    checkpoints,
 })

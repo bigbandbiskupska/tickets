@@ -54,3 +54,7 @@ table.schema td {
   min-width: 10px;
   min-height: 10px;
 }
+
+.seat-changed {
+  opacity: 0.7;
+}
