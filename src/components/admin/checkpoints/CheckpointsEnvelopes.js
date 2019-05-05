@@ -148,7 +148,7 @@ function remapSeats(checkpoint) {
 
         if (seatChange.to && !(seatChange.to.id in users)) {
             users[seatChange.to.id] = {
-                user: seatChange.from,
+                user: seatChange.to,
                 changes: []
             }
         }

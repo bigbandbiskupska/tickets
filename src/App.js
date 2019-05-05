@@ -4,13 +4,13 @@ import {NavLink, Route} from 'react-router-dom';
 import './App.css';
 import SchemaList from './components/user/SchemaList';
 import TicketList from './components/user/TicketList';
-import Schema from './components/user/Schema';
 import Ticket from './components/user/Ticket';
 import TemporaryTicket from "./components/user/TemporaryTicket";
 import Login from "./components/Login";
 import {connect} from "react-redux";
 import autoBind from "react-autobind";
 import {deleteTab} from "./actions";
+import SchemaPage from "./components/user/SchemaPage";
 
 class App extends Component {
 
@@ -29,9 +29,9 @@ class App extends Component {
                         </li>))}
                 </ul>
                 <div className="content">
-                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/login" component={Login}/>
                     <Route exact path="/" component={SchemaList}/>
-                    <Route path={`/schema/:id`} component={Schema}/>
+                    <Route path={`/schema/:id`} component={SchemaPage}/>
                     <Route path={`/tickets`} component={TicketList}/>
                     <Route path={`/ticket/:id`} component={Ticket}/>
                     <Route exact path={`/ticket`} component={TemporaryTicket}/>
@@ -78,14 +78,15 @@ function mapDispatchToProps(dispatch) {
 function mergeProps(props, dispatchProps) {
     const menu = props.menu;
 
-    if(props.tabs && props.tabs.length > 0) {
+    if (props.tabs && props.tabs.length > 0) {
         props.tabs.sort((a, b) => a.index > b.index).forEach((tab, i) => {
             menu.splice(tab.index + i, 0, (s, p) => (
                 <div style={{position: 'relative'}}>
                     <NavLink exact className="nav-link" to={tab.url}>
                         {tab.name}
                     </NavLink>
-                    <button type="button" onClick={() => dispatchProps.deleteTab(tab.id)} className="close" style={{position: 'absolute', top: 1, right: 2, fontSize: '1rem'}} aria-label="Close">
+                    <button type="button" onClick={() => dispatchProps.deleteTab(tab.id)} className="close"
+                            style={{position: 'absolute', top: 1, right: 2, fontSize: '1rem'}} aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

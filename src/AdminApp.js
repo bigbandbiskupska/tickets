@@ -5,7 +5,7 @@ import './AdminApp.css';
 import SchemaList from './components/admin/SchemaList';
 import Schema from './components/admin/Schema';
 import NewSchema from './components/admin/NewSchema';
-import Ticket from './components/user/Ticket';
+import Ticket from './components/user2/Ticket';
 import UserList from "./components/admin/UserList";
 import User from "./components/admin/User";
 import ReserveSchema from "./components/admin/ReserveSchema";
@@ -17,6 +17,7 @@ import OverviewSchema from "./components/admin/OverviewSchema";
 import OverviewSchemaList from "./components/admin/OverviewSchemaList";
 import OverviewTicketList from "./components/admin/OverviewTicketList";
 import Checkpoints from "./components/admin/checkpoints/Checkpoints";
+import ReserveSchemaPage from "./components/admin/ReserveSchemaPage";
 
 class AdminApp extends Component {
     render() {
@@ -35,7 +36,7 @@ class AdminApp extends Component {
                     <Route exact path={`${match.url}/schemas/overview`} component={OverviewSchemaList}/>
                     <Route exact path={`${match.url}/schemas/new`} component={NewSchema}/>
                     <Switch>
-                        <Route path={`${match.url}/schema/:id/reserve`} component={ReserveSchema}/>
+                        <Route path={`${match.url}/schema/:id/reserve`} component={ReserveSchemaPage}/>
                         <Route path={`${match.url}/schema/:id/overview`} component={OverviewSchema}/>
                         <Route path={`${match.url}/schema/:id`} component={Schema}/>
                     </Switch>

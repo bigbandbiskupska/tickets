@@ -1,7 +1,7 @@
 import React from 'react';
 import autoBind from "react-autobind";
 import {connect} from "react-redux";
-import Seat from "../../user/Seat";
+import Seat from "../../user2/Seat";
 import {addError, addSuccess, createTicket, fetchSchema, fetchSchemaHistory, fetchSeats} from '../../../actions';
 import '../schema.css';
 import classnames from "classnames";

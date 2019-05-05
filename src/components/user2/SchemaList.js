@@ -25,7 +25,7 @@ const Schema = ({match, id, name, hidden, locked}) => {
                 <span className={classnames({
                     'fa': true,
                     'fa-lock': locked
-                })}/>
+                })} />
             </td>
         </tr>
     );
@@ -59,15 +59,15 @@ class SchemaList extends Component {
                 </p>
                 <table className="table table-striped">
                     <thead>
-                    <tr>
-                        <th>Název</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th>Název</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {schemas.filter(schema => !schema.hidden).map(schema => (
-                        <Schema key={schema.id} match={match} {...schema} />
-                    ))}
+                        {schemas.filter(schema => !schema.hidden).map(schema => (
+                            <Schema key={schema.id} match={match} {...schema} />
+                        ))}
                     </tbody>
                 </table>
             </DependencyManager>

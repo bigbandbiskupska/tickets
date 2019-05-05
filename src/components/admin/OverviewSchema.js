@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import autoBind from "react-autobind";
 import {connect} from "react-redux";
-import Seat from "../user/Seat";
+import Seat from "../user2/Seat";
 import {addError, addSuccess, fetchSchema, fetchSeats, putTab} from '../../actions';
 
 import './schema.css';
