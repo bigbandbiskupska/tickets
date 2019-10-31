@@ -180,6 +180,7 @@ function mapStateToProps(state, ownProps) {
                 return remapped[id1].user.surname > remapped[id2].user.surname;
             })
             .map(id => remapped[id])
+            .filter(({user}) => !!user)
 
     }
 }
