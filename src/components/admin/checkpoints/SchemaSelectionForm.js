@@ -6,6 +6,7 @@ import {Form} from 'react-bootstrap';
 
 import '../schema.css';
 import DependencyManager from "../../DependencyManager";
+import sortBy from "lodash/sortBy";
 
 class SchemaSelectionForm extends React.Component {
 
@@ -63,7 +64,7 @@ class SchemaSelectionForm extends React.Component {
 function mapStateToProps(state, ownProps) {
     return {
         ownProps,
-        schemas: Object.values(state.schemas.schemas),
+        schemas: sortBy(Object.values(state.schemas.schemas), schema => -schema.id),
         apiKey: state.users.users[state.users.currentUser].token
     }
 }
