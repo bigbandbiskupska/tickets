@@ -47,7 +47,8 @@ class HistorySchema extends React.Component {
         const left = e.clientX, top = e.clientY;
         this.setState({
             popover: {
-                open: true,
+                // TODO: disabled due to mobile
+                open: false,
                 seat: seat,
                 position: {
                     left, top
