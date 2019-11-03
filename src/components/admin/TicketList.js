@@ -8,6 +8,7 @@ import DependencyManager from "../DependencyManager";
 import BooleanBadge from "../BooleanBadge";
 import {SyncLoader} from "react-spinners";
 import {addError} from "../../actions";
+import sortBy from "lodash/sortBy";
 
 
 class Ticket extends React.Component {
@@ -132,7 +133,7 @@ export class TicketList extends Component {
 
 function mapStateToProps(state, ownProps) {
     return {
-        tickets: Object.values(state.tickets.tickets),
+        tickets: sortBy(Object.values(state.tickets.tickets), ticket => -ticket.created_at.getTime()),
         apiKey: state.users.users[state.users.currentUser].token,
     }
 }

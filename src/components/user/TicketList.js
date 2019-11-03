@@ -7,6 +7,7 @@ import {fetchTicketsForUser} from "../../actions/index";
 import DependencyManager from "../DependencyManager";
 import {addError, addSuccess, deleteTicket} from "../../actions";
 import {SyncLoader} from "react-spinners";
+import sortBy from 'lodash/sortBy';
 
 
 class Ticket extends Component {
@@ -133,7 +134,7 @@ class TicketList extends Component {
 
 function mapStateToProps(state) {
     return {
-        tickets: Object.values(state.tickets.tickets).filter(ticket => ticket.user_id === state.users.currentUser),
+        tickets: sortBy(Object.values(state.tickets.tickets).filter(ticket => ticket.user_id === state.users.currentUser), ticket => -ticket.created_at.getTime()),
         user: state.users.users[state.users.currentUser],
         apiKey: state.users.users[state.users.currentUser].token,
     }

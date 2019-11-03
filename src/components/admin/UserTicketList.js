@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import {fetchTicketsForUser, updateTicket} from "../../actions/index";
 import {TicketList} from "./TicketList";
+import sortBy from "lodash/sortBy";
 
 
 class UserTicketList extends TicketList {
@@ -17,7 +18,7 @@ class UserTicketList extends TicketList {
 
 function mapStateToProps(state, ownProps) {
     return {
-        tickets: Object.values(state.tickets.tickets).filter(ticket => ticket.user_id === ownProps.userId),
+        tickets: sortBy(Object.values(state.tickets.tickets).filter(ticket => ticket.user_id === ownProps.userId), ticket => -ticket.created_at.getTime()),
         apiKey: state.users.users[state.users.currentUser].token,
         ...ownProps,
     }
