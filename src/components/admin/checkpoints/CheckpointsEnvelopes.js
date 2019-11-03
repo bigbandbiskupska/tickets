@@ -172,7 +172,8 @@ function mapStateToProps(state, ownProps) {
         ...ownProps,
         apiKey: state.users.users[state.users.currentUser].token,
         users: Object.keys(remapped)
-        // sort by name
+            .filter(id => !!remapped[id] && !!remapped[id].user)
+            // sort by name
             .sort((id1, id2) => {
                 if (remapped[id1].user.surname === remapped[id2].user.surname) {
                     return remapped[id1].user.name > remapped[id2].user.name;
@@ -180,7 +181,6 @@ function mapStateToProps(state, ownProps) {
                 return remapped[id1].user.surname > remapped[id2].user.surname;
             })
             .map(id => remapped[id])
-            .filter(({user}) => !!user)
 
     }
 }
