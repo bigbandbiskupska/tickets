@@ -37,8 +37,25 @@ class Ticket extends React.Component {
             })
     }
 
+    onPackage() {
+        const {id, onPackage} = this.props;
+        this.setState({
+            isSaving: true
+        })
+        onPackage && onPackage(id)
+            .then(ticket => {
+                this.setState({
+                    isSaving: false
+                })
+            }).catch(error => {
+                this.setState({
+                    isSaving: false
+                })
+            })
+    }
+
     render() {
-        const {id, note, created_at, confirmed} = this.props;
+        const {id, note, created_at, confirmed, packaged} = this.props;
         return (this.state.isSaving ? (
             <tr>
                 <td colSpan="5"><SyncLoader className='text-centered-spinner'/></td>
@@ -59,6 +76,16 @@ class Ticket extends React.Component {
                     <Link className={classnames('badge', 'badge-info')} to={`/admin/ticket/${id}`}>
                         Zobrazit
                     </Link>
+                </td>
+                <td>
+                    <BooleanBadge enabled={packaged} yes='Zabaleno' no={'Nezabaleno'}/>
+                    {!packaged && (<button
+                        type="button"
+                        className={classnames('btn', 'badge', 'btn-success')}
+                        onClick={this.onPackage}
+                    >
+                        Zabalit
+                    </button>)}
                 </td>
                 <td>
                     <BooleanBadge enabled={confirmed} yes='Zaplaceno' no={'Nezaplaceno'}/>
@@ -89,11 +116,16 @@ export class TicketList extends Component {
     }
 
     fetchData(props) {
-       return props.loadTickets(props.apiKey);
+        return props.loadTickets(props.apiKey);
     }
 
     onPay(id) {
         return this.props.payTicket(this.props.apiKey, id)
+            .catch(error => this.props.addError(error))
+    }
+
+    onPackage(id) {
+        return this.props.packageTicket(this.props.apiKey, id)
             .catch(error => this.props.addError(error))
     }
 
@@ -102,14 +134,17 @@ export class TicketList extends Component {
 
         return (
             <DependencyManager spinner blocking={this.dependencies}>
-                Přehled objednávek, detail objednávky je možno zobrazit kliknutím na 'Zobrazit'. Objednávka může být ve dvou stavech
+                Přehled objednávek, detail objednávky je možno zobrazit kliknutím na 'Zobrazit'. Objednávka může být ve
+                dvou stavech
                 <ol>
                     <li>zaplacená - označená zelenou barvou</li>
                     <li>nezaplacená - označená červenou barvou</li>
                 </ol>
-                Nezaplacené objednávky jsou automaticky po stanoveném čase rušeny, aby byla sedadla nabídnuta jiným zájemcům.
+                Nezaplacené objednávky jsou automaticky po stanoveném čase rušeny, aby byla sedadla nabídnuta jiným
+                zájemcům.
 
-                Jako administrátor můžete objednávku označit za zaplacenou. Zaplacenou objednávku již nemůže uživatel smazat.
+                Jako administrátor můžete objednávku označit za zaplacenou. Zaplacenou objednávku již nemůže uživatel
+                smazat.
                 <table className="table">
                     <thead>
                     <tr>
@@ -117,12 +152,13 @@ export class TicketList extends Component {
                         <th>Datum</th>
                         <th>Uživatel</th>
                         <th>Odkaz</th>
+                        <th>Zabalit</th>
                         <th>Zaplatit</th>
                     </tr>
                     </thead>
                     <tbody>
                     {tickets.map(ticket => (
-                        <Ticket key={ticket.id} {...ticket} onPay={this.onPay}/>
+                        <Ticket key={ticket.id} {...ticket} onPay={this.onPay} onPackage={this.onPackage}/>
                     ))}
                     </tbody>
                 </table>
@@ -145,6 +181,12 @@ function mapDispatchToProps(dispatch) {
         },
         payTicket(apiKey, ticketId) {
             return dispatch(updateTicket(apiKey, ticketId, {confirmed: true}))
+        },
+        packageTicket(apiKey, ticketId) {
+            return dispatch(updateTicket(apiKey, ticketId, {packaged: true}))
+        },
+        unpackageTicket(apiKey, ticketId) {
+            return dispatch(updateTicket(apiKey, ticketId, {packaged: false}))
         },
         addError(error) {
             return dispatch(addError(error))
