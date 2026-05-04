@@ -6,6 +6,7 @@ services:
       - "8003:3000"
     volumes:
       - ".:/app"
+      - "/app/node_modules"
   seats:
     build: ../seats/docker
     ports:
