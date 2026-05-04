@@ -1,6 +1,14 @@
 <IfModule mod_rewrite.c>
 
   RewriteEngine On
+
+  RewriteCond %{HTTP:X-Forwarded-Proto} =https
+  RewriteRule (.*) - [E=HTTPS:on]
+
+  RewriteCond %{ENV:HTTPS} !on
+  RewriteCond %{HTTPS} off
+  RewriteRule (.*) https://%{HTTP_HOST}/$1 [R=301,L]
+
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
